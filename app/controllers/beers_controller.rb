@@ -13,12 +13,12 @@ class BeersController < ApplicationController
   end
 
   def beers_by_name
-    @beers = Beer.where('name LIKE ?', '%' + params[:name] + '%')
+    @beers = current_user.beers.where('name LIKE ?', '%' + params[:name] + '%')
     render json: @beers
   end
 
   def beers_by_abv
-    @beers = Beer.where(abv: params[:abv].to_f)
+    @beers = current_user.beers.where(abv: params[:abv].to_f)
     render json: @beers
   end
 
