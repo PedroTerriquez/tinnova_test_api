@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       post :beers_by_name
       post :beers_by_abv
       post :save_favorite
+      get  :my_favorite_beer
     end
   end
 end

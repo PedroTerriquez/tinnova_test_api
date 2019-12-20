@@ -9,7 +9,7 @@ class BeersController < ApplicationController
 
   def all
     get_and_save_beers
-    render json: @api_beers
+    render json: current_user.beers
   end
 
   def beers_by_name
@@ -22,9 +22,14 @@ class BeersController < ApplicationController
     render json: @beers
   end
 
-  def save_favorite(id)
-    Beer.where(favorite: true).update(favorite: false)
-    Beer.find(id).update(favorite: true)
+  def save_favorite
+    return if params[:beer_id].empty?
+    current_user.favorite_beer.update(favorite: nil)
+    render json: Beer.find_by(beer_id: params[:beer_id], user_id: current_user.id).update(favorite: true)
+  end
+
+  def my_favorite_beer
+    render json: current_user.favorite_beer
   end
 
   private
