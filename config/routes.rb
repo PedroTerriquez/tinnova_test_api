@@ -4,7 +4,6 @@ Rails.application.routes.draw do
 
   resources :beers do
     collection do
-      get :all
       post :beers_by_name
       post :beers_by_abv
       post :save_favorite
