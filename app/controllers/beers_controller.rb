@@ -13,15 +13,13 @@ class BeersController < ApplicationController
   end
 
   def beers_by_name
-    return if params[:name].empty?
-    req_params = { beer_name: params[:name] }
-    get_and_save_beers(req_params)
+    @beers = Beer.where('name LIKE ?', '%' + params[:name] + '%')
+    render json: @beers
   end
 
-  def beers_by_abv(abv)
-    return if params[:name].empty?
-    req_params = { beer_name: params[:name] }
-    get_and_save_beers(req_params)
+  def beers_by_abv
+    @beers = Beer.where(abv: params[:abv].to_f)
+    render json: @beers
   end
 
   def save_favorite(id)
@@ -39,21 +37,21 @@ class BeersController < ApplicationController
     )
   end
 
-  def get_and_save_beers(req_params = nil)
-    @api_beers = JSON.parse(api.get('beers', req_params).body)
+  def get_and_save_beers
+    @api_beers = JSON.parse(api.get('beers').body)
     save_beers_database
   end
 
   def save_beers_database
-    return true
     @api_beers.each do |beer|
       Beer.create(
-        id: beer['id'],
+        beer_id: beer['id'],
         name: beer['name'],
         tagline: beer['tagline'],
         description: beer['description'],
         abv: beer['abv'],
-        seen_at: DateTime.now
+        seen_at: DateTime.now,
+        user_id: @current_user.id
       )
     end
   end
