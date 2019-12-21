@@ -1,6 +1,6 @@
 class BeersController < ApplicationController
   before_action :authenticate!
-  before_action :find_beers, except: %i[my_favorite_beer save_favorite]
+  before_action :find_beers, except: %i[index my_favorite_beer save_favorite]
 
   def index
   end
@@ -27,7 +27,7 @@ class BeersController < ApplicationController
   private
 
   def find_beers
-    @beers = BeersService.new(params.dup, current_user.id).process
+    @beers = BeersService.new(current_user.id, params.dup).process
     render "beers.json.jbuilder"
   end
 end
