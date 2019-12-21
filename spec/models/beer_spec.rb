@@ -1,0 +1,3 @@
+describe Beer do
+end
+
