@@ -6,10 +6,11 @@ class BeersService
 
   def process
     @beers = Beer.all
+    return @beers if @params.nil?
     @beers = @beers.where(id: @params[:id]) if @params[:id]
     @beers = @beers.where('name LIKE ?', '%' + @params[:name] + '%') if @params[:name]
     @beers = @beers.where(abv: @params[:abv].to_f) if @params[:abv]
-    beers_seen unless @params.nil?
+    beers_seen
     @beers
   end
 
